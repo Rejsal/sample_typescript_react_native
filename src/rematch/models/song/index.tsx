@@ -65,8 +65,8 @@ export const song = createModel<RootModel>()({
     async getSongs() {
       dispatch.song.onRequest();
       try {
-        const res = await getSongsFromAPI();
-        dispatch.song.onGetSongs(res);
+        const data: {results: SongModel[]} = await getSongsFromAPI();
+        dispatch.song.onGetSongs(data.results);
       } catch (e: any) {
         dispatch.song.onError(e?.message);
       }
