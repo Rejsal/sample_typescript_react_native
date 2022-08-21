@@ -1,9 +1,10 @@
 import {error} from '@assets';
 import {colors} from '@theme';
-import React from 'react';
+import React, {memo} from 'react';
 import {View, TouchableOpacity, Text, Image, StyleSheet} from 'react-native';
 import {SongModel} from 'src/rematch/models/song';
 import {trackDuration} from '../../helper';
+import {SharedElement} from 'react-navigation-shared-element';
 
 export type SongCardProps = {
   item: SongModel;
@@ -21,10 +22,12 @@ const SongCard = (props: SongCardProps) => {
     >
       <View style={styles.subContainer}>
         {item.artworkUrl100 ? (
-          <Image
-            style={styles.imageContainer}
-            source={{uri: item.artworkUrl100}}
-          />
+          <SharedElement id={item.artworkUrl100}>
+            <Image
+              style={styles.imageContainer}
+              source={{uri: item.artworkUrl100}}
+            />
+          </SharedElement>
         ) : (
           <View style={[styles.imageContainer, styles.alignCenter]}>
             <Image style={styles.icon} source={error} />
@@ -51,6 +54,8 @@ const SongCard = (props: SongCardProps) => {
     </TouchableOpacity>
   );
 };
+
+export default memo(SongCard);
 
 const styles = StyleSheet.create({
   container: {
@@ -100,5 +105,3 @@ const styles = StyleSheet.create({
     color: colors.primaryColor,
   },
 });
-
-export default SongCard;

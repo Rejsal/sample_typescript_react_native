@@ -33,7 +33,7 @@ export const song = createModel<RootModel>()({
   // reducers
   reducers: {
     // on request
-    onRequest(state: SongState) {
+    onRequest(state) {
       return {
         ...state,
         loading: true,
@@ -41,7 +41,7 @@ export const song = createModel<RootModel>()({
     },
 
     // on songs api success
-    onGetSongs(state: SongState, data: SongModel[]) {
+    onGetSongs(state, data: SongModel[]) {
       return {
         ...state,
         loading: false,
@@ -50,7 +50,7 @@ export const song = createModel<RootModel>()({
     },
 
     // on error
-    onError(state: SongState, error: string | null) {
+    onError(state, error: string | null) {
       return {
         ...state,
         loading: false,
@@ -65,7 +65,7 @@ export const song = createModel<RootModel>()({
     async getSongs() {
       dispatch.song.onRequest();
       try {
-        const data: {results: SongModel[]} = await getSongsFromAPI();
+        const data = await getSongsFromAPI();
         dispatch.song.onGetSongs(data.results);
       } catch (e: any) {
         dispatch.song.onError(e?.message);

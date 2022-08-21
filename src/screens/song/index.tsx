@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import {
   Text,
   View,
@@ -6,6 +6,8 @@ import {
   ActivityIndicator,
   StyleSheet,
   FlatList,
+  Image,
+  Pressable,
 } from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
 import {SongCard, Header} from '@components';
@@ -13,6 +15,8 @@ import {Dispatch, RootState} from 'src/rematch/store';
 import {colors} from '@theme';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {StackNavigatorParams} from 'src/navigator';
+import {SongModel} from 'src/rematch/models/song';
+import {SharedElement} from 'react-navigation-shared-element';
 
 type SongListProps = {
   navigation: StackNavigationProp<StackNavigatorParams, 'Song'>;
@@ -29,13 +33,17 @@ const SongList = ({navigation}: SongListProps) => {
     getSongs();
   }, []);
 
-  const _renderHeader = () => {
-    return <View style={styles.listHeader} />;
-  };
+  // const _renderHeader = () => {
+  //   return <View style={styles.listHeader} />;
+  // };
 
   const _itemSeperator = () => {
     return <View style={styles.seperator} />;
   };
+
+  const onClickCard = useCallback((data: SongModel) => {
+    navigation.push('ViewSong', {song: data});
+  }, []);
 
   const {loading = false, songs = []} = songModel;
   return (
@@ -52,16 +60,22 @@ const SongList = ({navigation}: SongListProps) => {
             <FlatList
               showsVerticalScrollIndicator={false}
               data={songs}
-              keyExtractor={(item, index) => index.toString()}
-              ListHeaderComponent={_renderHeader}
+              keyExtractor={(_, index) => index.toString()} // not a good practice to use index as key
               ItemSeparatorComponent={_itemSeperator}
               renderItem={({item}) => (
-                <SongCard
-                  item={item}
-                  onClickCard={data => {
-                    navigation.push('ViewSong', {song: data});
+                // <SongCard item={item} onClickCard={onClickCard} />
+                <Pressable
+                  onPress={() => {
+                    onClickCard(item);
                   }}
-                />
+                >
+                  <SharedElement id={item?.artworkUrl100 ?? ''}>
+                    <Image
+                      style={{width: '100%', height: 180}}
+                      source={{uri: item?.artworkUrl100 ?? ''}}
+                    />
+                  </SharedElement>
+                </Pressable>
               )}
             />
           ) : (

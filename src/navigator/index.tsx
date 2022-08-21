@@ -2,10 +2,7 @@ import 'react-native-gesture-handler';
 
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
-import {
-  createStackNavigator,
-  StackNavigationOptions,
-} from '@react-navigation/stack';
+import {createSharedElementStackNavigator} from 'react-navigation-shared-element';
 import {Song, ViewSong} from '@screens';
 import {SongModel} from 'src/rematch/models/song';
 
@@ -14,25 +11,19 @@ export type StackNavigatorParams = {
   ViewSong: {song: SongModel} | undefined;
 };
 
-const Stack = createStackNavigator<StackNavigatorParams>();
-
-const navigatorOptions: StackNavigationOptions = {
-  headerShown: false,
-};
+const Stack = createSharedElementStackNavigator<StackNavigatorParams>();
 
 export const Navigator = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator screenOptions={navigatorOptions}>
-        <Stack.Screen
-          name="Song"
-          component={Song}
-          options={{headerShown: false}}
-        />
+      <Stack.Navigator screenOptions={{headerShown: false}}>
+        <Stack.Screen name="Song" component={Song} />
         <Stack.Screen
           name="ViewSong"
           component={ViewSong}
-          options={{headerShown: false}}
+          sharedElements={route => {
+            return [route.params.song.artworkUrl100];
+          }}
         />
       </Stack.Navigator>
     </NavigationContainer>

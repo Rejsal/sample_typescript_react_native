@@ -16,6 +16,7 @@ import {arrow} from '@assets';
 import {colors, constants} from '@theme';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {StackNavigatorParams} from 'src/navigator';
+import {SharedElement} from 'react-navigation-shared-element';
 
 type ViewSongProps = {
   navigation: StackNavigationProp<StackNavigatorParams, 'ViewSong'>;
@@ -54,10 +55,12 @@ const ViewSong = ({navigation, route}: ViewSongProps) => {
         ]}
       >
         {song?.artworkUrl100 ? (
-          <Image
-            style={styles.imageContainer}
-            source={{uri: song.artworkUrl100}}
-          />
+          <SharedElement style={styles.imageContainer} id={song?.artworkUrl100}>
+            <Image
+              style={styles.imageContainer}
+              source={{uri: song.artworkUrl100}}
+            />
+          </SharedElement>
         ) : null}
         {song?.artworkUrl100 ? <View style={styles.imageContainer} /> : null}
         <View style={styles.headerView}>

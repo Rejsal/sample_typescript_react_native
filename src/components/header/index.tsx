@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {memo} from 'react';
 import {View, TouchableOpacity, Text, Image, StyleSheet} from 'react-native';
 import {arrow} from '@assets';
 import {colors} from '@theme';
@@ -29,6 +29,8 @@ const HeaderView = (props: HeaderViewProps) => {
   );
 };
 
+export default memo(HeaderView);
+
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 16,
@@ -54,5 +56,3 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 });
-
-export default HeaderView;
